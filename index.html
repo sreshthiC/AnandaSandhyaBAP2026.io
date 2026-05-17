@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ananda Sandhya 2026 — Bengali Association of Pittsburgh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --maroon:      #7a1c2e;
+    --maroon-dark: #4e0f1c;
+    --maroon-light:#c04a5a;
+    --green:       #1d5c3a;
+    --green-light: #2e7d52;
+    --cream:       #fdf6ec;
+    --gold:        #c9973a;
+    --gold-light:  #e8c070;
+    --text:        #2a1a10;
+    --text-muted:  #6b4c38;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.2s, height 0.2s, opacity 0.2s;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ── FLOATING PETALS (hero only) ── */
+  .petals-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    top: -30px;
+    font-size: 0.9rem;
+    opacity: 0;
+    animation: petalFall linear forwards;
+    pointer-events: none;
+    user-select: none;
+  }
+  @keyframes petalFall {
+    0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+    8%   { opacity: 0.7; }
+    85%  { opacity: 0.15; }
+    100% { opacity: 0; transform: translateY(105vh) rotate(300deg); }
+  }
+
+  /* ── BORDER STRIP ── */
+  .border-strip {
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--maroon) 0 12px,
+      var(--gold) 12px 24px,
+      var(--green) 24px 36px,
+      var(--gold) 36px 48px
+    );
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--maroon-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(78,15,28,0.97); backdrop-filter: blur(12px); }
+  nav .nav-brand {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-light);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul a {
+    color: #e8d8c8;
+    text-decoration: none;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  nav ul a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold-light);
+    transition: width 0.3s ease;
+  }
+  nav ul a:hover { color: var(--gold-light); }
+  nav ul a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 64px 32px 80px;
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+  }
+
+  /* Animated mandala BG */
+  .mandala-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .mandala-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    opacity: 0;
+    animation: mandalaExpand ease-out forwards;
+  }
+  @keyframes mandalaExpand {
+    0%   { opacity: 0; transform: scale(0.3); }
+    30%  { opacity: 0.12; }
+    100% { opacity: 0.04; transform: scale(1); }
+  }
+
+  /* Particle dots */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particleFloat ease-in-out infinite alternate;
+  }
+  @keyframes particleFloat {
+    from { transform: translateY(0) translateX(0); }
+    to   { transform: translateY(-20px) translateX(10px); }
+  }
+
+  .hero-logo {
+    width: 210px;
+    height: 210px;
+    border-raius: 50%;
+    border: 3px solid var(--gold);
+    padding: 8px;
+    background: white;
+    object-position: center center;
+    box-shadow: 0 4px 32px rgba(122,28,46,0.15), 0 0 0 0 rgba(201,151,58,0.4);
+    object-fit: cover;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: logoReveal 1.2s 0.2s ease forwards, logoPulse 3s 2s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+      border: 3px solid var(--gold);
+outline: 1px solid var(--gold-light);
+outline-offset: 6px;
+  }
+  @keyframes logoReveal {
+    from { opacity: 0; transform: scale(0.6) rotate(-15deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+  @keyframes logoPulse {
+    0%, 100% { box-shadow: 0 4px 32px rgba(122,28,46,0.15), 0 0 0 0 rgba(201,151,58,0.3); }
+    50%       { box-shadow: 0 4px 32px rgba(122,28,46,0.15), 0 0 0 18px rgba(201,151,58,0); }
+  }
+
+  .hero-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 300;
+    color: var(--maroon-dark);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--green);
+    position: relative;
+    display: inline-block;
+  }
+  /* Shimmer effect on "Sandhya" */
+  h1 em::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(201,151,58,0.5) 50%, transparent 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s 2s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 16px;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: fadeUp 0.9s 1s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-divider {
+    margin: 28px auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.1s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-divider span {
+    font-size: 1.4rem;
+    color: var(--gold);
+    animation: spinStar 8s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spinStar {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .hero-divider::before, .hero-divider::after {
+    content: '';
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+
+  .hero-date {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--maroon);
+    letter-spacing: 0.12em;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.2s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-venue {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-top: 6px;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.3s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown-wrapper {
+    margin-top: 32px;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.4s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+  .countdown-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .countdown {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .countdown-unit {
+    text-align: center;
+    min-width: 70px;
+  }
+  .countdown-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--maroon-dark);
+    line-height: 1;
+    display: block;
+    position: relative;
+  }
+  .countdown-number.flip {
+    animation: flipNum 0.4s ease;
+  }
+  @keyframes flipNum {
+    0%   { transform: rotateX(0deg); }
+    50%  { transform: rotateX(-90deg); color: var(--gold); }
+    100% { transform: rotateX(0deg); }
+  }
+  .countdown-unit span.cd-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: block;
+    margin-top: 4px;
+  }
+  .countdown-sep {
+    font-size: 2rem;
+    color: var(--gold);
+    line-height: 2.8rem;
+    opacity: 0.5;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.1; } }
+
+  .hero-cta {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.6s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+  .btn {
+    padding: 14px 36px;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: none;
+    border: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+  }
+  .btn:hover::before { width: 300px; height: 300px; }
+  .btn-primary {
+    background: var(--maroon);
+    color: var(--gold-light);
+    box-shadow: 0 4px 20px rgba(122,28,46,0.3);
+  }
+  .btn-primary:hover { background: var(--maroon-dark); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(122,28,46,0.4); }
+  .btn-outline {
+    background: transparent;
+    color: var(--green);
+    border: 1.5px solid var(--green);
+  }
+  .btn-outline:hover { background: var(--green); color: white; transform: translateY(-3px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* stagger children */
+  .stagger > * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .stagger.visible > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s; }
+  .stagger.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.1s; }
+  .stagger.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.2s; }
+  .stagger.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.3s; }
+  .stagger.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.4s; }
+  .stagger.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.5s; }
+  .stagger.visible > *:nth-child(7) { opacity: 1; transform: none; transition-delay: 0.6s; }
+  .stagger.visible > *:nth-child(8) { opacity: 1; transform: none; transition-delay: 0.7s; }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 0; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    color: var(--maroon-dark);
+    line-height: 1.15;
+  }
+  .section-rule {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin-top: 18px;
+  }
+  .section-rule::before, .section-rule::after {
+    content: ''; width: 60px; height: 1px;
+    background: var(--gold); opacity: 0.7;
+  }
+  .section-rule span {
+    color: var(--gold);
+    font-size: 1rem;
+    display: inline-block;
+    transition: transform 0.4s;
+  }
+  .section-rule:hover span { transform: rotate(180deg); }
+
+  /* ── ABOUT ── */
+  #about { background: white; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .about-text p {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-size: 1.05rem;
+  }
+  .about-text p:first-child {
+    font-size: 1.2rem;
+    color: var(--text);
+    font-style: italic;
+  }
+  .about-image-placeholder {
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--green) 100%);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; letter-spacing: 0.1em;
+    position: relative; overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .about-image-placeholder:hover { transform: scale(1.02); box-shadow: 0 20px 60px rgba(122,28,46,0.3); }
+  .about-image-placeholder::before {
+    content: ''; position: absolute; inset: 16px;
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 2px;
+  }
+  /* Shimmer overlay */
+  .about-image-placeholder::after {
+    content: '';
+    position: absolute;
+    top: -100%; left: -60%;
+    width: 40%; height: 300%;
+    background: rgba(255,255,255,0.08);
+    transform: skewX(-20deg);
+    animation: shimmerSlide 4s ease-in-out infinite;
+  }
+  @keyframes shimmerSlide {
+    0%, 100% { left: -60%; }
+    50%       { left: 130%; }
+  }
+
+  /* ── PROGRAM ── */
+  #program { background: var(--cream); }
+  .program-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'EB Garamond', serif;
+    box-shadow: 0 4px 24px rgba(122,28,46,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .program-table thead tr {
+    background: var(--maroon-dark);
+    color: var(--gold-light);
+  }
+  .program-table thead th {
+    padding: 14px 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-align: left;
+    font-weight: 400;
+  }
+  .program-table tbody tr {
+    border-bottom: 1px solid rgba(122,28,46,0.1);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .program-table tbody tr:hover {
+    background: rgba(122,28,46,0.05);
+    transform: translateX(6px);
+  }
+  .program-table tbody td {
+    padding: 14px 20px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    transition: color 0.2s;
+  }
+  .program-table tbody td:first-child {
+    color: var(--maroon);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    width: 80px;
+  }
+  .program-table tbody td:nth-child(2) {
+    color: var(--text);
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08em;
+    transition: transform 0.2s;
+  }
+  .badge:hover { transform: scale(1.1); }
+  .badge-mc   { background: rgba(122,28,46,0.1); color: var(--maroon); }
+  .badge-quiz { background: rgba(29,92,58,0.1);  color: var(--green); }
+
+  /* Progress bar for duration */
+  .prog-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .prog-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(122,28,46,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 80px;
+  }
+  .prog-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--maroon), var(--gold));
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1s ease 0.3s;
+  }
+  .prog-bar.animated .prog-bar-fill { transform: scaleX(1); }
+
+  /* ── VIDEOS ── */
+  #videos { background: var(--maroon-dark); }
+  #videos .section-header h2 { color: var(--gold-light); }
+  #videos .section-tag { color: var(--gold); }
+  #videos .section-rule::before,
+  #videos .section-rule::after { background: var(--gold); opacity: 0.4; }
+  #videos .section-rule span { color: var(--gold); }
+
+  .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .video-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  }
+  .video-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    border-color: rgba(201,151,58,0.3);
+  }
+  .video-thumb {
+    aspect-ratio: 16/9;
+    background: rgba(255,255,255,0.04);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; cursor: none; overflow: hidden;
+  }
+  .video-thumb::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(122,28,46,0.3), rgba(29,92,58,0.3));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .video-card:hover .video-thumb::before { opacity: 1; }
+  .video-thumb .play-btn {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(201,151,58,0.9);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
+    z-index: 1;
+  }
+  .video-card:hover .play-btn {
+    transform: scale(1.15);
+    box-shadow: 0 0 30px rgba(201,151,58,0.5);
+  }
+  .video-thumb-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 8px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.75rem; letter-spacing: 0.1em;
+    font-family: 'Cinzel', serif;
+  }
+  .video-info { padding: 18px; }
+  .video-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-light);
+    font-size: 1.2rem; font-weight: 400; margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+  .video-card:hover .video-info h3 { color: #fff; }
+  .video-info p { color: rgba(255,255,255,0.4); font-size: 0.9rem; line-height: 1.5; }
+
+  /* ── ALPONA SIDE PANELS ── */
+  .alpona-left,
+  .alpona-right {
+    position: absolute;
+    top: 0;
+    width: 160px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    animation: alponaFade 1.8s 0.5s ease forwards;
+  }
+  .alpona-left  { left: 0; }
+  .alpona-right { right: 0; transform: scaleX(-1); }
+  @keyframes alponaFade {
+    from { opacity: 0; }
+    to   { opacity: 0.18; }
+  }
+  .alpona-left svg,
+  .alpona-right svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── ENHANCED PHOTO GALLERY ── */
+  #photo-gallery { background: var(--cream); }
+  #photo-gallery .section-header h2 { color: var(--maroon-dark); }
+
+  .gallery-coming-soon {
+    text-align: center;
+    padding: 60px 24px;
+    border: 2px dashed rgba(122,28,46,0.15);
+    border-radius: 6px;
+    background: rgba(122,28,46,0.02);
+  }
+  .gallery-coming-soon .cs-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+  .gallery-coming-soon h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--maroon-dark);
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+  .gallery-coming-soon p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 400px;
+    margin: 0 auto 24px;
+  }
+
+  /* Upload zone */
+  .gallery-upload-zone {
+    border: 2px dashed rgba(122,28,46,0.25);
+    border-radius: 6px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+    margin-bottom: 32px;
+    background: white;
+  }
+  .gallery-upload-zone:hover,
+  .gallery-upload-zone.dragover {
+    border-color: var(--gold);
+    background: rgba(201,151,58,0.04);
+  }
+  .gallery-upload-zone .upload-icon { font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.5; }
+  .gallery-upload-zone p { color: var(--text-muted); font-size: 0.95rem; margin: 0; }
+  .gallery-upload-zone span { color: var(--maroon); font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.1em; }
+  #galleryFileInput { display: none; }
+
+  /* Photo masonry grid */
+  .photo-masonry {
+    columns: 4;
+    column-gap: 12px;
+  }
+  @media (max-width: 900px) { .photo-masonry { columns: 3; } }
+  @media (max-width: 600px) { .photo-masonry { columns: 2; } }
+
+  .photo-item {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: none;
+    position: relative;
+    background: linear-gradient(135deg, rgba(122,28,46,0.08), rgba(29,92,58,0.08));
+  }
+  .photo-item img {
+    width: 100%;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .photo-item::after {
+    content: '⤢';
+    position: absolute; inset: 0;
+    background: rgba(78,15,28,0.55);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-light);
+    font-size: 1.6rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .photo-item:hover img { transform: scale(1.05); }
+  .photo-item:hover::after { opacity: 1; }
+
+  /* empty slot placeholder */
+  .photo-placeholder {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    height: 160px;
+    background: linear-gradient(135deg, rgba(122,28,46,0.07), rgba(29,92,58,0.07));
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(122,28,46,0.25);
+    font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.12em;
+  }
+
+  /* ── LIGHTBOX ── */
+  .lightbox-overlay {
+    position: fixed; inset: 0;
+    background: rgba(20,8,12,0.95);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(6px);
+  }
+  .lightbox-overlay.open { opacity: 1; pointer-events: all; }
+  .lightbox-inner {
+    position: relative;
+    max-width: 90vw;
+    max-height: 88vh;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-img {
+    max-width: 85vw;
+    max-height: 82vh;
+    border-radius: 3px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    object-fit: contain;
+    transform: scale(0.92);
+    transition: transform 0.35s ease;
+  }
+  .lightbox-overlay.open .lightbox-img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute; top: -48px; right: 0;
+    color: rgba(255,255,255,0.6);
+    font-size: 2rem;
+    cursor: none;
+    background: none; border: none;
+    transition: color 0.2s, transform 0.2s;
+    line-height: 1;
+  }
+  .lightbox-close:hover { color: var(--gold-light); transform: rotate(90deg); }
+  .lightbox-prev, .lightbox-next {
+    position: absolute; top: 50%;
+    transform: translateY(-50%);
+    background: rgba(201,151,58,0.15);
+    border: 1px solid rgba(201,151,58,0.3);
+    color: var(--gold-light);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .lightbox-prev { left: -64px; }
+  .lightbox-next { right: -64px; }
+  .lightbox-prev:hover { background: rgba(201,151,58,0.35); transform: translateY(-50%) scale(1.1); }
+  .lightbox-next:hover { background: rgba(201,151,58,0.35); transform: translateY(-50%) scale(1.1); }
+  .lightbox-caption {
+    position: absolute; bottom: -40px; left: 0; right: 0;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em;
+  }
+
+  /* ── SPONSORS ── */
+  #sponsors { background: var(--cream); }
+  .sponsor-tiers { display: flex; flex-direction: column; gap: 48px; }
+  .sponsor-tier-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem; letter-spacing: 0.25em;
+    color: var(--gold); text-transform: uppercase;
+    text-align: center; margin-bottom: 24px;
+  }
+  .sponsor-tier-label.gold-tier   { color: var(--gold); }
+  .sponsor-tier-label.silver-tier { color: #aaa; }
+  .sponsor-tier-label.bronze-tier { color: #c07040; }
+  .sponsor-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+  .sponsor-box {
+    width: 180px; height: 90px;
+    border: 1.5px dashed rgba(122,28,46,0.2);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(122,28,46,0.25);
+    font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.12em;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s, color 0.3s;
+    cursor: none;
+  }
+  .sponsor-box:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(201,151,58,0.15);
+    color: var(--gold);
+  }
+  .sponsor-box.large { width: 240px; height: 110px; }
+
+  /* ── COMMITTEE ── */
+  #committee { background: white; }
+  .committee-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+  }
+  .committee-card {
+    text-align: center;
+    padding: 28px 20px;
+    border: 1px solid rgba(122,28,46,0.1);
+    border-radius: 4px;
+    transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  .committee-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--maroon), var(--gold), var(--green));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+  .committee-card:hover { box-shadow: 0 12px 40px rgba(122,28,46,0.12); transform: translateY(-4px); border-color: rgba(122,28,46,0.2); }
+  .committee-card:hover::before { transform: scaleX(1); }
+  .committee-avatar {
+    width: 70px; height: 70px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--maroon), var(--green));
+    margin: 0 auto 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 300;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .committee-card:hover .committee-avatar {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(122,28,46,0.3);
+  }
+  .committee-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; color: var(--maroon-dark); margin-bottom: 4px;
+  }
+  .committee-card p {
+    font-size: 0.82rem; color: var(--text-muted);
+    font-family: 'Cinzel', serif; letter-spacing: 0.08em;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--maroon-dark); }
+  #contact .section-header h2 { color: var(--gold-light); }
+  #contact .section-tag { color: var(--gold); }
+  #contact .section-rule::before,
+  #contact .section-rule::after { background: var(--gold); opacity: 0.4; }
+  #contact .section-rule span { color: var(--gold); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .contact-info p { color: rgba(255,255,255,0.6); margin-bottom: 20px; font-size: 1rem; }
+  .contact-detail { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .contact-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(201,151,58,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0; color: var(--gold);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .contact-detail:hover .contact-icon {
+    background: rgba(201,151,58,0.15);
+    transform: rotate(15deg) scale(1.1);
+  }
+  .contact-detail-text strong {
+    display: block; color: var(--gold-light);
+    font-family: 'Cinzel', serif; font-size: 0.75rem;
+    letter-spacing: 0.12em; margin-bottom: 2px;
+  }
+  .contact-detail-text span { color: rgba(255,255,255,0.5); font-size: 0.95rem; }
+
+  /* RSVP Button */
+  .rsvp-btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 16px 48px;
+    background: var(--gold);
+    color: var(--maroon-dark);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  .rsvp-btn::before {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.2);
+    transition: left 0.3s ease;
+  }
+  .rsvp-btn:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(201,151,58,0.4); }
+  .rsvp-btn:hover::before { left: 100%; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #1a0a10;
+    padding: 40px 40px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  footer::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(201,151,58,0.05), transparent 60%);
+    pointer-events: none;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; color: var(--gold-light);
+    font-weight: 300; letter-spacing: 0.04em; margin-bottom: 8px;
+  }
+  .footer-sub {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.2em; color: rgba(255,255,255,0.3);
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .footer-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 24px auto; max-width: 400px; }
+  .footer-copy { color: rgba(255,255,255,0.2); font-size: 0.8rem; }
+
+  /* ── MUSIC NOTE ANIMATION ── */
+  .musical-note {
+    position: fixed;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 9990;
+    animation: noteFloat 1.5s ease-out forwards;
+    user-select: none;
+  }
+  @keyframes noteFloat {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-80px) scale(1.4) rotate(20deg); }
+  }
+
+  /* ── SCROLL TO TOP ── */
+  .scroll-top {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    width: 48px; height: 48px;
+    background: var(--maroon);
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-light);
+    font-size: 1.2rem;
+    cursor: none;
+    z-index: 200;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s, background 0.2s;
+    text-decoration: none;
+  }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); }
+  .scroll-top:hover { background: var(--maroon-dark); transform: translateY(-3px); }
+
+  /* ── CONFETTI BURST (on logo click) ── */
+  .confetti-piece {
+    position: fixed;
+    width: 8px; height: 8px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall 1.2s ease-out forwards;
+    border-radius: 2px;
+  }
+  @keyframes confettiFall {
+    0%   { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--rot)); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    nav ul { gap: 18px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .video-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 24px; }
+  }
+  @media (max-width: 600px) {
+    nav ul { display: none; }
+    .video-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    h1 { font-size: 2.8rem; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="border-strip"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a class="nav-brand" href="#hero">BAP · Ananda Sandhya · আনন্দ সন্ধ্যা</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#videos">Performances</a></li>
+    <li><a href="#photo-gallery">Gallery</a></li>
+    <li><a href="#sponsors">Sponsors</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <!-- Floating petals (hero only) -->
+  <div class="petals-canvas" id="petalsCanvas" aria-hidden="true"></div>
+
+  <!-- Alpona decorative panels -->
+  <div class="alpona-left" aria-hidden="true">
+    <svg viewBox="0 0 160 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <style>
+          .alp { fill: none; stroke: #7a1c2e; stroke-width: 1.2; }
+          .alp-g { fill: none; stroke: #1d5c3a; stroke-width: 1; }
+          .alp-f { fill: #7a1c2e; }
+          .alp-fg { fill: #1d5c3a; }
+          .alp-gold { fill: none; stroke: #c9973a; stroke-width: 1; }
+        </style>
+      </defs>
+
+      <!-- Top lotus bloom -->
+      <g transform="translate(80,80)">
+        <!-- outer petals -->
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(45)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(90)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(135)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(225)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(270)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(315)"/>
+        <!-- inner petals -->
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(22.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(67.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(112.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(157.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(202.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(247.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(292.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(337.5)"/>
+        <!-- centre -->
+        <circle cx="0" cy="0" r="10" class="alp"/>
+        <circle cx="0" cy="0" r="5" class="alp-g"/>
+        <circle cx="0" cy="0" r="2" class="alp-f"/>
+      </g>
+
+      <!-- Vertical stem -->
+      <line x1="80" y1="130" x2="80" y2="780" class="alp-gold"/>
+
+      <!-- Repeating leaf pairs along stem -->
+      <!-- leaf set 1 -->
+      <g transform="translate(80,180)">
+        <path d="M0,0 Q-28,-18 -12,-36 Q-4,-18 0,0" class="alp"/>
+        <path d="M0,0 Q28,-18 12,-36 Q4,-18 0,0" class="alp"/>
+        <line x1="0" y1="0" x2="-14" y2="-28" class="alp-g" stroke-width="0.7"/>
+        <line x1="0" y1="0" x2="14" y2="-28" class="alp-g" stroke-width="0.7"/>
+      </g>
+      <!-- small bud -->
+      <g transform="translate(80,230)">
+        <ellipse cx="0" cy="0" rx="6" ry="10" class="alp"/>
+        <ellipse cx="0" cy="0" rx="3" ry="6" class="alp-g"/>
+      </g>
+      <!-- leaf set 2 -->
+      <g transform="translate(80,290)">
+        <path d="M0,0 Q-32,-14 -18,-34 Q-6,-16 0,0" class="alp"/>
+        <path d="M0,0 Q32,-14 18,-34 Q6,-16 0,0" class="alp"/>
+        <line x1="0" y1="0" x2="-16" y2="-26" class="alp-g" stroke-width="0.7"/>
+        <line x1="0" y1="0" x2="16" y2="-26" class="alp-g" stroke-width="0.7"/>
+      </g>
+      <!-- mini flower -->
+      <g transform="translate(80,350)">
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(60)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(120)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(240)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(300)"/>
+        <circle cx="0" cy="0" r="5" class="alp"/>
+        <circle cx="0" cy="0" r="2" class="alp-f"/>
+      </g>
+      <!-- leaf set 3 -->
+      <g transform="translate(80,420)">
+        <path d="M0,0 Q-28,-18 -12,-36 Q-4,-18 0,0" class="alp"/>
+        <path d="M0,0 Q28,-18 12,-36 Q4,-18 0,0" class="alp"/>
+      </g>
+      <!-- paisley motif -->
+      <g transform="translate(80,490)">
+        <!-- left paisley -->
+        <path d="M0,0 Q-40,10 -36,-20 Q-20,-38 -8,-20 Q-4,-10 0,0" class="alp"/>
+        <path d="M-20,-18 Q-28,-22 -26,-14" class="alp-g" stroke-width="0.8"/>
+        <!-- right paisley -->
+        <path d="M0,0 Q40,10 36,-20 Q20,-38 8,-20 Q4,-10 0,0" class="alp"/>
+        <path d="M20,-18 Q28,-22 26,-14" class="alp-g" stroke-width="0.8"/>
+      </g>
+      <!-- leaf set 4 -->
+      <g transform="translate(80,565)">
+        <path d="M0,0 Q-32,-14 -18,-34 Q-6,-16 0,0" class="alp"/>
+        <path d="M0,0 Q32,-14 18,-34 Q6,-16 0,0" class="alp"/>
+      </g>
+      <!-- mini flower 2 -->
+      <g transform="translate(80,630)">
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(288)"/>
+        <circle cx="0" cy="0" r="5" class="alp-g"/>
+        <circle cx="0" cy="0" r="2" class="alp-fg"/>
+      </g>
+      <!-- leaf set 5 -->
+      <g transform="translate(80,700)">
+        <path d="M0,0 Q-28,-18 -12,-36 Q-4,-18 0,0" class="alp"/>
+        <path d="M0,0 Q28,-18 12,-36 Q4,-18 0,0" class="alp"/>
+      </g>
+      <!-- bottom bud -->
+      <g transform="translate(80,760)">
+        <ellipse cx="0" cy="0" rx="7" ry="12" class="alp"/>
+        <ellipse cx="0" cy="0" rx="4" ry="7" class="alp-g"/>
+        <circle cx="0" cy="0" r="2" class="alp-f"/>
+      </g>
+
+      <!-- Dot border along left edge -->
+      <g fill="#c9973a">
+        <circle cx="14" cy="80"  r="2"/>
+        <circle cx="14" cy="140" r="2"/>
+        <circle cx="14" cy="200" r="2"/>
+        <circle cx="14" cy="260" r="2"/>
+        <circle cx="14" cy="320" r="2"/>
+        <circle cx="14" cy="380" r="2"/>
+        <circle cx="14" cy="440" r="2"/>
+        <circle cx="14" cy="500" r="2"/>
+        <circle cx="14" cy="560" r="2"/>
+        <circle cx="14" cy="620" r="2"/>
+        <circle cx="14" cy="680" r="2"/>
+        <circle cx="14" cy="740" r="2"/>
+        <circle cx="14" cy="800" r="2"/>
+      </g>
+      <!-- connecting line along left edge -->
+      <line x1="14" y1="80" x2="14" y2="800" stroke="#c9973a" stroke-width="0.6" stroke-dasharray="4 6"/>
+    </svg>
+  </div>
+
+  <div class="alpona-right" aria-hidden="true">
+    <svg viewBox="0 0 160 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <style>
+          .alp { fill: none; stroke: #7a1c2e; stroke-width: 1.2; }
+          .alp-g { fill: none; stroke: #1d5c3a; stroke-width: 1; }
+          .alp-f { fill: #7a1c2e; }
+          .alp-fg { fill: #1d5c3a; }
+          .alp-gold { fill: none; stroke: #c9973a; stroke-width: 1; }
+        </style>
+      </defs>
+      <!-- Same design — mirroring handled by CSS scaleX(-1) on .alpona-right -->
+      <g transform="translate(80,80)">
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(45)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(90)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(135)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(225)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(270)"/>
+        <ellipse cx="0" cy="-38" rx="8" ry="18" class="alp" transform="rotate(315)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(22.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(67.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(112.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(157.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(202.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(247.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(292.5)"/>
+        <ellipse cx="0" cy="-22" rx="5" ry="12" class="alp-g" transform="rotate(337.5)"/>
+        <circle cx="0" cy="0" r="10" class="alp"/>
+        <circle cx="0" cy="0" r="5" class="alp-g"/>
+        <circle cx="0" cy="0" r="2" class="alp-f"/>
+      </g>
+      <line x1="80" y1="130" x2="80" y2="780" class="alp-gold"/>
+      <g transform="translate(80,180)">
+        <path d="M0,0 Q-28,-18 -12,-36 Q-4,-18 0,0" class="alp"/>
+        <path d="M0,0 Q28,-18 12,-36 Q4,-18 0,0" class="alp"/>
+        <line x1="0" y1="0" x2="-14" y2="-28" class="alp-g" stroke-width="0.7"/>
+        <line x1="0" y1="0" x2="14" y2="-28" class="alp-g" stroke-width="0.7"/>
+      </g>
+      <g transform="translate(80,230)">
+        <ellipse cx="0" cy="0" rx="6" ry="10" class="alp"/>
+        <ellipse cx="0" cy="0" rx="3" ry="6" class="alp-g"/>
+      </g>
+      <g transform="translate(80,290)">
+        <path d="M0,0 Q-32,-14 -18,-34 Q-6,-16 0,0" class="alp"/>
+        <path d="M0,0 Q32,-14 18,-34 Q6,-16 0,0" class="alp"/>
+        <line x1="0" y1="0" x2="-16" y2="-26" class="alp-g" stroke-width="0.7"/>
+        <line x1="0" y1="0" x2="16" y2="-26" class="alp-g" stroke-width="0.7"/>
+      </g>
+      <g transform="translate(80,350)">
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(60)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(120)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(240)"/>
+        <ellipse cx="0" cy="-16" rx="5" ry="10" class="alp" transform="rotate(300)"/>
+        <circle cx="0" cy="0" r="5" class="alp"/>
+        <circle cx="0" cy="0" r="2" class="alp-f"/>
+      </g>
+      <g transform="translate(80,420)">
+        <path d="M0,0 Q-28,-18 -12,-36 Q-4,-18 0,0" class="alp"/>
+        <path d="M0,0 Q28,-18 12,-36 Q4,-18 0,0" class="alp"/>
+      </g>
+      <g transform="translate(80,490)">
+        <path d="M0,0 Q-40,10 -36,-20 Q-20,-38 -8,-20 Q-4,-10 0,0" class="alp"/>
+        <path d="M-20,-18 Q-28,-22 -26,-14" class="alp-g" stroke-width="0.8"/>
+        <path d="M0,0 Q40,10 36,-20 Q20,-38 8,-20 Q4,-10 0,0" class="alp"/>
+        <path d="M20,-18 Q28,-22 26,-14" class="alp-g" stroke-width="0.8"/>
+      </g>
+      <g transform="translate(80,565)">
+        <path d="M0,0 Q-32,-14 -18,-34 Q-6,-16 0,0" class="alp"/>
+        <path d="M0,0 Q32,-14 18,-34 Q6,-16 0,0" class="alp"/>
+      </g>
+      <g transform="translate(80,630)">
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-14" rx="5" ry="9" class="alp" transform="rotate(288)"/>
+        <circle cx="0" cy="0" r="5" class="alp-g"/>
+        <circle cx="0" cy="0" r="2" class="alp-fg"/>
+      </g>
+      <g transform="translate(80,700)">
+        <path d="M0,0 Q-28,-18 -12,-36 Q-4,-18 0,0" class="alp"/>
+        <path d="M0,0 Q28,-18 12,-36 Q4,-18 0,0" class="alp"/>
+      </g>
+      <g transform="translate(80,760)">
+        <ellipse cx="0" cy="0" rx="7" ry="12" class="alp"/>
+        <ellipse cx="0" cy="0" rx="4" ry="7" class="alp-g"/>
+        <circle cx="0" cy="0" r="2" class="alp-f"/>
+      </g>
+      <g fill="#c9973a">
+        <circle cx="14" cy="80"  r="2"/>
+        <circle cx="14" cy="140" r="2"/>
+        <circle cx="14" cy="200" r="2"/>
+        <circle cx="14" cy="260" r="2"/>
+        <circle cx="14" cy="320" r="2"/>
+        <circle cx="14" cy="380" r="2"/>
+        <circle cx="14" cy="440" r="2"/>
+        <circle cx="14" cy="500" r="2"/>
+        <circle cx="14" cy="560" r="2"/>
+        <circle cx="14" cy="620" r="2"/>
+        <circle cx="14" cy="680" r="2"/>
+        <circle cx="14" cy="740" r="2"/>
+        <circle cx="14" cy="800" r="2"/>
+      </g>
+      <line x1="14" y1="80" x2="14" y2="800" stroke="#c9973a" stroke-width="0.6" stroke-dasharray="4 6"/>
+    </svg>
+  </div>
+
+    
+  <!-- Mandala background rings -->
+  <div class="mandala-bg" aria-hidden="true" id="mandalaContainer"></div>
+
+  <img class="hero-logo" id="heroLogo"
+    src="bap-logo2.png"
+    alt="BAP Logo"
+    style="border:3px solid #c9973a; border-radius:50%; background:white;"
+    title="Click me! 🎉" />
+
+  <div class="hero-tag">Bengali Association of Pittsburgh</div>
+
+  <h1>Ananda<br /><em data-text="Sandhya">Sandhya</em></h1>
+
+  <p class="hero-subtitle">An Evening of Community, Culture &amp; Celebration</p>
+
+  <div class="hero-divider"><span>✦</span></div>
+
+  <p class="hero-date">— June 13th @ 12PM —</p>
+  <p class="hero-venue">Discovery Christian Church · 170 Scharberry Ln, Mars, PA 16046</p>
+
+  <!-- Live Countdown -->
+  <div class="countdown-wrapper">
+    <p class="countdown-label">Counting down to the celebration</p>
+    <div class="countdown">
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-days">--</span>
+        <span class="cd-label">Days</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-hours">--</span>
+        <span class="cd-label">Hours</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-mins">--</span>
+        <span class="cd-label">Minutes</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <span class="countdown-number" id="cd-secs">--</span>
+        <span class="cd-label">Seconds</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-cta">
+    <a href="#program" class="btn btn-primary">View Program</a>
+    <a href="#contact" class="btn btn-outline">Get in Touch</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">About the Event</span>
+      <h2>আনন্দ সন্ধ্যা</h2>
+      <h2>A Joyous Evening</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal-left">
+        <p>Ananda Sandhya is one of the most cherished annual events of the Bengali Association of Pittsburgh — a joyful evening woven together with music, dance, drama, and the warmth of community.</p>
+        <p>Join us for an unforgettable celebration of Bengali culture, featuring performances by talented community members spanning all ages. Come for the art, stay for the people.</p>
+        <p>A beloved tradition since 1981, Ananda Sandhya brings together the Pittsburgh Bengali diaspora every year for an evening of laughter, music, and belonging.</p>
+        <p style="margin-top:24px;">
+          <a href="#program" class="btn btn-outline" style="display:inline-block;">See the Full Program →</a>
+        </p>
+      </div>
+      <div class="about-image-placeholder reveal-right">
+        Add Event Photo Here
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM ORDER -->
+<section id="program">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Schedule</span>
+      <h2>Order of Performances</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+    <table class="program-table reveal">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Performance / Segment</th>
+          <th>Duration</th>
+          <th>Buffer</th>
+          <th>Type</th>
+          <th>Host / Coordinator</th>
+        </tr>
+      </thead>
+      <tbody class="stagger">
+        <tr>
+          <td>01</td>
+          <td>Speech / MC Opening</td>
+          <td>
+            <div class="prog-bar-wrap">
+              8 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:8%"></div></div>
+            </div>
+          </td>
+          <td>—</td>
+          <td><span class="badge badge-mc">MC</span></td>
+          <td>Dipanwita / Debolina</td>
+        </tr>
+        <tr>
+          <td>02</td>
+          <td>BAP Opening Song</td>
+          <td>
+            <div class="prog-bar-wrap">
+              5 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:5%"></div></div>
+            </div>
+          </td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>03</td>
+          <td>Instrument</td>
+          <td>
+            <div class="prog-bar-wrap">
+              10 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:10%"></div></div>
+            </div>
+          </td>
+          <td>—</td>
+          <td><span class="badge badge-mc">MC</span></td>
+          <td>Arpita / Chaitali</td>
+        </tr>
+        <tr>
+          <td>04</td>
+          <td>Singing</td>
+          <td>
+            <div class="prog-bar-wrap">
+              40 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:40%"></div></div>
+            </div>
+          </td>
+          <td>15 min</td>
+          <td><span class="badge badge-mc">MC</span></td>
+          <td>Dipanwita / Debolina</td>
+        </tr>
+        <tr>
+          <td>05</td>
+          <td>Natok &amp; Prize Distribution</td>
+          <td>
+            <div class="prog-bar-wrap">
+              60 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:60%"></div></div>
+            </div>
+          </td>
+          <td>15 min</td>
+          <td><span class="badge badge-quiz">Quiz</span></td>
+          <td>Gobindo</td>
+        </tr>
+        <tr>
+          <td>06</td>
+          <td>Dance</td>
+          <td>
+            <div class="prog-bar-wrap">
+              30 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:30%"></div></div>
+            </div>
+          </td>
+          <td>—</td>
+          <td><span class="badge badge-mc">MC</span></td>
+          <td>Dipanwita / Debolina</td>
+        </tr>
+        <tr>
+          <td>07</td>
+          <td>Prize Distribution</td>
+          <td>
+            <div class="prog-bar-wrap">
+              15 min
+              <div class="prog-bar"><div class="prog-bar-fill" style="width:15%"></div></div>
+            </div>
+          </td>
+          <td>15 min</td>
+          <td><span class="badge badge-mc">MC</span></td>
+          <td>Arpita / Chaitali</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- VIDEOS / PERFORMANCES -->
+<section id="videos">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">On Stage</span>
+      <h2>Performances &amp; Highlights</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+    <div class="video-grid stagger">
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-thumb-label">Video Coming Soon</div>
+        </div>
+        <div class="video-info">
+          <h3>Performance Title</h3>
+          <p>Description of this performance — artist name, category, a brief note about the act.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-thumb-label">Video Coming Soon</div>
+        </div>
+        <div class="video-info">
+          <h3>Performance Title</h3>
+          <p>Description of this performance — artist name, category, a brief note about the act.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-thumb-label">Video Coming Soon</div>
+        </div>
+        <div class="video-info">
+          <h3>Performance Title</h3>
+          <p>Description of this performance — artist name, category, a brief note about the act.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-thumb-label">Video Coming Soon</div>
+        </div>
+        <div class="video-info">
+          <h3>Performance Title</h3>
+          <p>Description of this performance — artist name, category, a brief note about the act.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-thumb-label">Video Coming Soon</div>
+        </div>
+        <div class="video-info">
+          <h3>Performance Title</h3>
+          <p>Description of this performance — artist name, category, a brief note about the act.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="play-btn">▶</div>
+          <div class="video-thumb-label">Video Coming Soon</div>
+        </div>
+        <div class="video-info">
+          <h3>Performance Title</h3>
+          <p>Description of this performance — artist name, category, a brief note about the act.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section id="photo-gallery">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Memories</span>
+      <h2>Photo Gallery</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+
+    <!-- Upload zone (visible before photos are added) -->
+    <div class="gallery-upload-zone reveal" id="uploadZone">
+      <input type="file" id="galleryFileInput" accept="image/*" multiple />
+      <span class="upload-icon">🖼️</span>
+      <p>Drop photos here or <span>click to upload</span></p>
+      <p style="font-size:0.8rem; margin-top:6px; opacity:0.6;">Photos will appear below after the event — add them here to share memories with the community</p>
+    </div>
+
+    <!-- Coming soon notice (shown when no photos yet) -->
+    <div class="gallery-coming-soon reveal" id="galleryComingSoon">
+      <span class="cs-icon">📷</span>
+      <h3>Photos Coming Soon</h3>
+      <p>Event photos will appear here after June 13th. Check back to relive the memories!</p>
+    </div>
+
+    <!-- Masonry photo grid (shown when photos are uploaded) -->
+    <div class="photo-masonry" id="photoMasonry" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+    <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+    <button class="lightbox-next" id="lightboxNext" aria-label="Next">›</button>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<!-- SPONSORS -->
+<section id="sponsors">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Our Supporters</span>
+      <h2>Sponsors &amp; Partners</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+    <div class="sponsor-tiers">
+      <div class="reveal">
+        <div class="sponsor-tier-label gold-tier">✦ Gold Sponsors ✦</div>
+        <div class="sponsor-row stagger">
+          <div class="sponsor-box large">Sponsor Logo</div>
+          <div class="sponsor-box large">Sponsor Logo</div>
+          <div class="sponsor-box large">Sponsor Logo</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="sponsor-tier-label silver-tier">— Silver Sponsors —</div>
+        <div class="sponsor-row stagger">
+          <div class="sponsor-box">Sponsor Logo</div>
+          <div class="sponsor-box">Sponsor Logo</div>
+          <div class="sponsor-box">Sponsor Logo</div>
+          <div class="sponsor-box">Sponsor Logo</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="sponsor-tier-label bronze-tier">· Community Partners ·</div>
+        <div class="sponsor-row stagger">
+          <div class="sponsor-box">Partner Logo</div>
+          <div class="sponsor-box">Partner Logo</div>
+          <div class="sponsor-box">Partner Logo</div>
+          <div class="sponsor-box">Partner Logo</div>
+          <div class="sponsor-box">Partner Logo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORGANIZING COMMITTEE -->
+<section id="committee">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">The Team</span>
+      <h2>Organizing Committee</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+    <div class="committee-grid stagger">
+      <div class="committee-card"><div class="committee-avatar">A</div><h3>Name Here</h3><p>Role / Title</p></div>
+      <div class="committee-card"><div class="committee-avatar">B</div><h3>Name Here</h3><p>Role / Title</p></div>
+      <div class="committee-card"><div class="committee-avatar">C</div><h3>Name Here</h3><p>Role / Title</p></div>
+      <div class="committee-card"><div class="committee-avatar">D</div><h3>Name Here</h3><p>Role / Title</p></div>
+      <div class="committee-card"><div class="committee-avatar">E</div><h3>Name Here</h3><p>Role / Title</p></div>
+      <div class="committee-card"><div class="committee-avatar">F</div><h3>Name Here</h3><p>Role / Title</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Reach Us</span>
+      <h2>Contact &amp; Information</h2>
+      <div class="section-rule"><span>✦</span></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal-left">
+        <p>Have questions about Ananda Sandhya, sponsorship, or performances? We'd love to hear from you.</p>
+        <div class="contact-detail">
+          <div class="contact-icon">✉</div>
+          <div class="contact-detail-text">
+            <strong>Email</strong>
+            <span>bapec@bengalipitt.org</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📍</div>
+          <div class="contact-detail-text">
+            <strong>Venue</strong>
+            <span>Discovery Christian Church — 170 Scharberry Ln, Mars, PA 16046</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🌐</div>
+          <div class="contact-detail-text">
+            <strong>Website</strong>
+            <span>bengaliassociationofpittsburgh.weebly.com</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📱</div>
+          <div class="contact-detail-text">
+            <strong>Social Media</strong>
+            <span>Instagram: @Bap_bengalisinpgh</span>
+          </div>
+        </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdTuUaD4LH5mZeCvUYHgz1L-2M7KoW5yCZhTNHiJGeKEo318Q/viewform" target="_blank" class="rsvp-btn">
+          RSVP Now →
+        </a>
+      </div>
+      <div class="reveal-right" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:32px; text-align:center; color:rgba(255,255,255,0.2); font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.12em; min-height:280px; display:flex; flex-direction:column; gap:16px; align-items:center; justify-content:center;">
+        <div style="font-size:2rem; opacity:0.3;">✉</div>
+        <div>RSVP / Contact Form</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ananda Sandhya</div>
+  <div class="footer-sub">Bengali Association of Pittsburgh · Est. 1981</div>
+  <div style="color:rgba(255,255,255,0.25);font-size:0.9rem;margin-bottom:8px;">Community &nbsp;✦&nbsp; Culture &nbsp;✦&nbsp; Celebration</div>
+  <div class="footer-divider"></div>
+  <div class="footer-copy">© 2026 Bengali Association of Pittsburgh. All rights reserved.</div>
+</footer>
+
+<div class="border-strip"></div>
+
+<!-- Scroll to top -->
+<a href="#hero" class="scroll-top" id="scrollTop" aria-label="Back to top">↑</a>
+
+<script>
+// ── CUSTOM CURSOR ──
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+function animateCursorRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursorRing.style.left = rx + 'px';
+  cursorRing.style.top  = ry + 'px';
+  requestAnimationFrame(animateCursorRing);
+}
+animateCursorRing();
+
+document.querySelectorAll('a, button, .committee-card, .video-card, .sponsor-box, .gallery-item').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px';
+    cursor.style.height = '20px';
+    cursorRing.style.width = '56px';
+    cursorRing.style.height = '56px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    cursorRing.style.width = '36px';
+    cursorRing.style.height = '36px';
+  });
+});
+
+// ── MANDALA RINGS ──
+const mc = document.getElementById('mandalaContainer');
+const colors = ['rgba(122,28,46,', 'rgba(29,92,58,', 'rgba(201,151,58,'];
+for (let i = 0; i < 8; i++) {
+  const ring = document.createElement('div');
+  ring.className = 'mandala-ring';
+  const size = 200 + i * 120;
+  const color = colors[i % 3] + (0.15 - i * 0.015) + ')';
+  ring.style.cssText = `
+    width:${size}px; height:${size}px;
+    border-color:${color};
+    animation-delay:${i * 0.15}s;
+    animation-duration:${1.2 + i * 0.1}s;
+  `;
+  mc.appendChild(ring);
+}
+
+// ── FLOATING PETALS (hero only, minimal) ──
+const canvas = document.getElementById('petalsCanvas');
+const symbols = ['✿', '❀', '✦', '⚘'];
+let petalInterval = null;
+
+function spawnPetal() {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  const dur = 9 + Math.random() * 10;
+  p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  p.style.cssText = `
+    left: ${Math.random() * 100}%;
+    animation-duration: ${dur}s;
+    animation-delay: ${Math.random() * 10}s;
+    font-size: ${0.55 + Math.random() * 0.5}rem;
+    color: hsl(${Math.random() > 0.5 ? 5 : 145}, 50%, ${42 + Math.random() * 15}%);
+  `;
+  canvas.appendChild(p);
+  p.addEventListener('animationend', () => p.remove());
+}
+
+// spawn a small initial set
+for (let i = 0; i < 5; i++) setTimeout(spawnPetal, i * 1000);
+// keep a slow trickle going indefinitely
+petalInterval = setInterval(spawnPetal, 2200);
+
+// ── COUNTDOWN ──
+const eventDate = new Date('2026-06-13T12:00:00');
+const cdDays  = document.getElementById('cd-days');
+const cdHours = document.getElementById('cd-hours');
+const cdMins  = document.getElementById('cd-mins');
+const cdSecs  = document.getElementById('cd-secs');
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function updateCountdown() {
+  const now  = new Date();
+  const diff = eventDate - now;
+  if (diff <= 0) {
+    cdDays.textContent = cdHours.textContent = cdMins.textContent = cdSecs.textContent = '00';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+
+  function setFlip(el, val) {
+    if (el.textContent !== pad(val)) {
+      el.textContent = pad(val);
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+  }
+  setFlip(cdDays, d);
+  setFlip(cdHours, h);
+  setFlip(cdMins, m);
+  setFlip(cdSecs, s);
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ── SCROLL ANIMATIONS ──
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stagger');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // animate prog bars
+      entry.target.querySelectorAll('.prog-bar').forEach(b => b.classList.add('animated'));
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => observer.observe(el));
+
+// ── NAV SCROLL + SCROLL TOP ──
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ── SCROLL TO TOP ──
+const scrollTopBtn = document.getElementById('scrollTop');
+
+// ── LOGO CONFETTI BURST ──
+const heroLogo = document.getElementById('heroLogo');
+const confettiColors = ['#c9973a','#7a1c2e','#1d5c3a','#e8c070','#c04a5a','#2e7d52','#fdf6ec'];
+heroLogo.addEventListener('click', () => {
+  const rect = heroLogo.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const angle = (Math.PI * 2 * i) / 40 + Math.random() * 0.3;
+    const dist  = 80 + Math.random() * 120;
+    p.style.cssText = `
+      left: ${cx}px; top: ${cy}px;
+      background: ${confettiColors[i % confettiColors.length]};
+      --tx: ${Math.cos(angle) * dist}px;
+      --ty: ${Math.sin(angle) * dist}px;
+      --rot: ${Math.random() * 720}deg;
+      animation-duration: ${0.8 + Math.random() * 0.6}s;
+      width: ${4 + Math.random() * 8}px;
+      height: ${4 + Math.random() * 8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+    `;
+    document.body.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+});
+
+// ── PHOTO GALLERY + LIGHTBOX ──
+const uploadZone    = document.getElementById('uploadZone');
+const fileInput     = document.getElementById('galleryFileInput');
+const comingSoon    = document.getElementById('galleryComingSoon');
+const photoMasonry  = document.getElementById('photoMasonry');
+const lightbox      = document.getElementById('lightbox');
+const lightboxImg   = document.getElementById('lightboxImg');
+const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev  = document.getElementById('lightboxPrev');
+const lightboxNext  = document.getElementById('lightboxNext');
+const lightboxCap   = document.getElementById('lightboxCaption');
+
+let galleryImages = []; // array of {src, name}
+let currentIdx = 0;
+
+function showGallery() {
+  comingSoon.style.display = 'none';
+  photoMasonry.style.display = 'block';
+}
+
+function addPhotos(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const src  = e.target.result;
+      const name = file.name.replace(/\.[^.]+$/, '');
+      galleryImages.push({ src, name });
+      const idx = galleryImages.length - 1;
+
+      const item = document.createElement('div');
+      item.className = 'photo-item';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = name;
+      img.loading = 'lazy';
+      item.appendChild(img);
+      item.addEventListener('click', () => openLightbox(idx));
+      photoMasonry.appendChild(item);
+      showGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// click to upload
+uploadZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => addPhotos(e.target.files));
+
+// drag-and-drop
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  addPhotos(e.dataTransfer.files);
+});
+
+// lightbox controls
+function openLightbox(idx) {
+  currentIdx = idx;
+  lightboxImg.src = galleryImages[idx].src;
+  lightboxImg.alt = galleryImages[idx].name;
+  lightboxCap.textContent = `${galleryImages[idx].name}  ·  ${idx + 1} / ${galleryImages.length}`;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { lightboxImg.src = ''; }, 300);
+}
+function prevPhoto() {
+  currentIdx = (currentIdx - 1 + galleryImages.length) % galleryImages.length;
+  lightboxImg.src = galleryImages[currentIdx].src;
+  lightboxCap.textContent = `${galleryImages[currentIdx].name}  ·  ${currentIdx + 1} / ${galleryImages.length}`;
+}
+function nextPhoto() {
+  currentIdx = (currentIdx + 1) % galleryImages.length;
+  lightboxImg.src = galleryImages[currentIdx].src;
+  lightboxCap.textContent = `${galleryImages[currentIdx].name}  ·  ${currentIdx + 1} / ${galleryImages.length}`;
+}
+
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', prevPhoto);
+lightboxNext.addEventListener('click', nextPhoto);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'Escape')       closeLightbox();
+  if (e.key === 'ArrowLeft')    prevPhoto();
+  if (e.key === 'ArrowRight')   nextPhoto();
+});
+const notes = ['♩','♪','♫','♬','𝅘𝅥𝅮'];
+document.querySelectorAll('.play-btn').forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    const rect = btn.getBoundingClientRect();
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const n = document.createElement('div');
+        n.className = 'musical-note';
+        n.textContent = notes[Math.floor(Math.random() * notes.length)];
+        n.style.cssText = `
+          left: ${rect.left + Math.random() * 40 - 10}px;
+          top: ${rect.top}px;
+          color: ${Math.random() > 0.5 ? '#c9973a' : '#e8c070'};
+          animation-delay: ${i * 0.15}s;
+        `;
+        document.body.appendChild(n);
+        n.addEventListener('animationend', () => n.remove());
+      }, i * 100);
+    }
+  });
+});
+</script>
+</body>
+</html>
