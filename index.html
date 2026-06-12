@@ -7,6 +7,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- ═══════════════════════════════════════════════════════════════
+       FIREBASE SETUP  (takes ~5 min — do this once)
+       ────────────────────────────────────────────────────────────────
+       1. Go to https://console.firebase.google.com and create a project
+       2. Click "Add app" → Web, register it, copy the firebaseConfig
+       3. In the Firebase console sidebar:
+            Build → Storage  → Get started (choose "Start in test mode")
+            Build → Realtime Database → Create database (test mode)
+       4. Paste your config values into the firebaseConfig block below
+       ═══════════════════════════════════════════════════════════════ -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <style>
     :root {
       --maroon:      #b01e1e;   /* slightly brighter crimson, matches logo border */
@@ -1902,10 +1915,19 @@
         </div>
         <div style="flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:0;">
           <div class="gallery-upload-zone reveal" id="uploadZone" style="margin-bottom:0;display:none;">
-            <input type="file" id="galleryFileInput" accept="image/*" multiple />
-            <span class="upload-icon">🖼️</span>
-            <p>Drop photos here or <span>click to upload</span></p>
-            <p style="font-size:.8rem;margin-top:6px;opacity:.6;">Photos will appear here after the event — upload to share memories</p>
+            <!-- shown before Google OAuth -->
+            <div id="connectGooglePrompt">
+              <span class="upload-icon" style="opacity:.45">🔗</span>
+              <p>Connect your Google account to upload photos</p>
+              <button id="connectGoogleBtn" style="margin-top:12px;padding:10px 24px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:2px;font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Connect Google Account</button>
+            </div>
+            <!-- shown after Google OAuth -->
+            <div id="uploadPrompt" style="display:none;">
+              <input type="file" id="galleryFileInput" accept="image/*" multiple />
+              <span class="upload-icon">🖼️</span>
+              <p>Drop photos here or <span>click to upload</span></p>
+              <p style="font-size:.8rem;margin-top:6px;opacity:.6;">Photos will appear here after the event — upload to share memories</p>
+            </div>
           </div>
           <div id="adminLoginBtn" style="text-align:center;padding:10px 0;">
             <button onclick="document.getElementById('adminModal').style.display='flex'" style="background:none;border:none;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);cursor:pointer;opacity:.45;transition:opacity .2s;" onmouseenter="this.style.opacity='.9'" onmouseleave="this.style.opacity='.45'">🔒 Admin</button>
@@ -2498,9 +2520,17 @@
     const ADMIN_PW = 'AnandaSandhya@BAP2026';
     let isAdmin = sessionStorage.getItem('bap_admin') === '1';
     function applyAdminState(){
-      document.getElementById('uploadZone').style.display = isAdmin ? '' : 'none';
-      document.getElementById('adminLoginBtn').style.display = isAdmin ? 'none' : '';
-      document.getElementById('adminLogoutBtn').style.display = isAdmin ? '' : 'none';
+      const uz=document.getElementById('uploadZone');
+      document.getElementById('adminLoginBtn').style.display=isAdmin?'none':'';
+      document.getElementById('adminLogoutBtn').style.display=isAdmin?'':'none';
+      if(isAdmin){
+        uz.style.display='';
+        const hasToken=gdToken&&Date.now()<gdTokenExpiry;
+        document.getElementById('connectGooglePrompt').style.display=hasToken?'none':'';
+        document.getElementById('uploadPrompt').style.display=hasToken?'':'none';
+      }else{
+        uz.style.display='none';
+      }
       renderGallery();
     }
     function adminLogin(){
@@ -2524,17 +2554,83 @@
       applyAdminState();
     }
 
+    // ── GOOGLE DRIVE CONFIG ──────────────────────────────────────────
+    // Setup (~5 min):
+    // 1. Go to console.cloud.google.com → New/select project
+    // 2. APIs & Services → Enable "Google Drive API"
+    // 3. APIs & Services → Credentials:
+    //      a) Create API Key  (paste below as GDRIVE_API_KEY)
+    //      b) Create OAuth 2.0 Client ID → Web application
+    //         → Add your site URL to "Authorized JavaScript origins"
+    //         → paste the Client ID below as GDRIVE_CLIENT_ID
+    // 4. In Google Drive: create a folder → Share →
+    //      "Anyone with the link" → Viewer
+    //      Copy the folder ID from the URL (long string after /folders/)
+    //      paste below as GDRIVE_FOLDER_ID
+    const GDRIVE_API_KEY   = 'AIzaSyA4V7jK-W2gIEFWVdyWxPl4ZuxJt7BHkXs';
+    const GDRIVE_CLIENT_ID = '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';
+    const GDRIVE_FOLDER_ID = '17d77zqUQivRFji8NuDIetZ1vZKfOVhcm';
+    // ─────────────────────────────────────────────────────────────────
+
+    let gdToken=null,gdTokenExpiry=0,tokenClient;
+
+    function initGIS(){
+      if(!window.google?.accounts?.oauth2){setTimeout(initGIS,300);return;}
+      tokenClient=google.accounts.oauth2.initTokenClient({
+        client_id:GDRIVE_CLIENT_ID,
+        scope:'https://www.googleapis.com/auth/drive.file',
+        callback:resp=>{
+          if(resp.error){setUploadStatus('Google authorization failed.',true);return;}
+          gdToken=resp.access_token;gdTokenExpiry=Date.now()+(resp.expires_in*1000-60000);
+          document.getElementById('connectGooglePrompt').style.display='none';
+          document.getElementById('uploadPrompt').style.display='';
+        }
+      });
+    }
+    initGIS();
+
+    function ensureToken(){
+      return new Promise(resolve=>{
+        if(gdToken&&Date.now()<gdTokenExpiry){resolve(gdToken);return;}
+        const orig=tokenClient.callback;
+        tokenClient.callback=resp=>{
+          tokenClient.callback=orig;
+          if(!resp.error){gdToken=resp.access_token;gdTokenExpiry=Date.now()+(resp.expires_in*1000-60000);}
+          resolve(gdToken);
+        };
+        tokenClient.requestAccessToken({prompt:''});
+      });
+    }
+
     // GALLERY
     const uploadZone=document.getElementById('uploadZone'),fileInput=document.getElementById('galleryFileInput');
     const comingSoon=document.getElementById('galleryComingSoon'),photoMasonry=document.getElementById('photoMasonry');
     const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lightboxImg'),lbCap=document.getElementById('lightboxCaption');
     let imgs=[],ci=0;
 
+    function setUploadStatus(msg,isErr){
+      let el=document.getElementById('uploadStatus');
+      if(!el){el=document.createElement('p');el.id='uploadStatus';el.style.cssText='font-size:.8rem;margin-top:8px;';uploadZone.appendChild(el);}
+      el.style.color=isErr?'var(--maroon)':'var(--text-muted)';el.textContent=msg;
+    }
+
+    async function loadPhotos(){
+      try{
+        const q=encodeURIComponent(`'${GDRIVE_FOLDER_ID}' in parents and mimeType contains 'image/' and trashed=false`);
+        const url=`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,createdTime)&orderBy=createdTime&key=${GDRIVE_API_KEY}&pageSize=200`;
+        const resp=await fetch(url);const data=await resp.json();
+        imgs=(data.files||[]).map(f=>({id:f.id,url:`https://drive.google.com/thumbnail?id=${f.id}&sz=w1200`,name:f.name.replace(/\.[^.]+$/,'')}));
+      }catch(e){console.error('loadPhotos',e);}
+      renderGallery();
+    }
+    loadPhotos();
+    setInterval(loadPhotos,30000);
+
     function renderGallery(){
       photoMasonry.innerHTML='';
-      imgs.forEach((img,idx)=>{
+      imgs.forEach((photo,idx)=>{
         const item=document.createElement('div');item.className='photo-item';
-        const imgEl=document.createElement('img');imgEl.src=img.src;imgEl.alt=img.name;imgEl.loading='lazy';
+        const imgEl=document.createElement('img');imgEl.src=photo.url;imgEl.alt=photo.name;imgEl.loading='lazy';
         const removeBtn=document.createElement('button');removeBtn.className='photo-remove';removeBtn.textContent='✕';removeBtn.setAttribute('aria-label','Remove photo');
         removeBtn.addEventListener('click',ev=>{ev.stopPropagation();removePhoto(idx);});
         if(!isAdmin)removeBtn.style.display='none';
@@ -2545,26 +2641,63 @@
       if(imgs.length===0){comingSoon.style.display='';photoMasonry.style.display='none';}
       else{comingSoon.style.display='none';photoMasonry.style.display='block';}
     }
-    function removePhoto(idx){
-      imgs.splice(idx,1);
-      renderGallery();
+
+    function addPhotos(files){
+      const queue=Array.from(files).filter(f=>f.type.startsWith('image/'));
+      if(!queue.length)return;
+      setUploadStatus('Uploading…');
+      let done=0;
+      queue.forEach(f=>{
+        uploadPhoto(f)
+          .then(()=>{done++;if(done===queue.length){setUploadStatus('');loadPhotos();}})
+          .catch(err=>{console.error(err);setUploadStatus('Upload failed — check Drive config.',true);});
+      });
+    }
+
+    async function uploadPhoto(file){
+      const token=await ensureToken();
+      const meta=JSON.stringify({name:file.name,parents:[GDRIVE_FOLDER_ID]});
+      const form=new FormData();
+      form.append('metadata',new Blob([meta],{type:'application/json'}));
+      form.append('file',file);
+      const resp=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{
+        method:'POST',headers:{Authorization:`Bearer ${token}`},body:form
+      });
+      if(!resp.ok)throw new Error('Upload failed');
+    }
+
+    async function removePhoto(idx){
+      const photo=imgs[idx];
+      const token=await ensureToken();
+      await fetch(`https://www.googleapis.com/drive/v3/files/${photo.id}`,{
+        method:'DELETE',headers:{Authorization:`Bearer ${token}`}
+      });
+      await loadPhotos();
       if(lb.classList.contains('open')){
         if(imgs.length===0){cl();}
-        else{ci=Math.min(ci,imgs.length-1);lbImg.src=imgs[ci].src;lbCap.textContent=imgs[ci].name+' · '+(ci+1)+' / '+imgs.length;}
+        else{ci=Math.min(ci,imgs.length-1);lbImg.src=imgs[ci].url;lbCap.textContent=imgs[ci].name+' · '+(ci+1)+' / '+imgs.length;}
       }
     }
-    function addPhotos(files){Array.from(files).forEach(f=>{if(!f.type.startsWith('image/'))return;const r=new FileReader();r.onload=e=>{imgs.push({src:e.target.result,name:f.name.replace(/\.[^.]+$/,'')});renderGallery();};r.readAsDataURL(f);});}
-    uploadZone.addEventListener('click',()=>fileInput.click());
+
+    document.getElementById('connectGoogleBtn').addEventListener('click',e=>{
+      e.stopPropagation();if(tokenClient)tokenClient.requestAccessToken({prompt:'consent'});
+    });
+    uploadZone.addEventListener('click',()=>{
+      if(document.getElementById('uploadPrompt').style.display!=='none')fileInput.click();
+    });
     fileInput.addEventListener('change',e=>addPhotos(e.target.files));
     uploadZone.addEventListener('dragover',e=>{e.preventDefault();uploadZone.classList.add('dragover');});
     uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('dragover'));
-    uploadZone.addEventListener('drop',e=>{e.preventDefault();uploadZone.classList.remove('dragover');addPhotos(e.dataTransfer.files);});
+    uploadZone.addEventListener('drop',e=>{
+      e.preventDefault();uploadZone.classList.remove('dragover');
+      if(document.getElementById('uploadPrompt').style.display!=='none')addPhotos(e.dataTransfer.files);
+    });
     applyAdminState();
 
-    function ol(i){ci=i;lbImg.src=imgs[i].src;lbImg.alt=imgs[i].name;lbCap.textContent=imgs[i].name+' · '+(i+1)+' / '+imgs.length;lb.classList.add('open');document.body.style.overflow='hidden';}
+    function ol(i){ci=i;lbImg.src=imgs[i].url;lbImg.alt=imgs[i].name;lbCap.textContent=imgs[i].name+' · '+(i+1)+' / '+imgs.length;lb.classList.add('open');document.body.style.overflow='hidden';}
     function cl(){lb.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{lbImg.src='';},300);}
-    function prev(){ci=(ci-1+imgs.length)%imgs.length;lbImg.src=imgs[ci].src;lbCap.textContent=imgs[ci].name+' · '+(ci+1)+' / '+imgs.length;}
-    function next(){ci=(ci+1)%imgs.length;lbImg.src=imgs[ci].src;lbCap.textContent=imgs[ci].name+' · '+(ci+1)+' / '+imgs.length;}
+    function prev(){ci=(ci-1+imgs.length)%imgs.length;lbImg.src=imgs[ci].url;lbCap.textContent=imgs[ci].name+' · '+(ci+1)+' / '+imgs.length;}
+    function next(){ci=(ci+1)%imgs.length;lbImg.src=imgs[ci].url;lbCap.textContent=imgs[ci].name+' · '+(ci+1)+' / '+imgs.length;}
 
     document.getElementById('lightboxClose').addEventListener('click',cl);
     document.getElementById('lightboxPrev').addEventListener('click',prev);
