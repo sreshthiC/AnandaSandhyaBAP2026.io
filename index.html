@@ -2790,6 +2790,9 @@ Everyone rises up in rebellion against the tyrant king and smashes his statue to
         if (!c.dataset.cardId) c.dataset.cardId = String(i);
       });
 
+     grid._savedCardOrder = Array.from(grid.querySelectorAll('.video-card'));
+
+
       var cardId    = card.dataset.cardId;
       var thumbEl   = card.querySelector('.video-thumb');
       var infoEl    = card.querySelector('.video-info');
@@ -2849,6 +2852,12 @@ Everyone rises up in rebellion against the tyrant king and smashes his statue to
       var origCard = grid.querySelector('.video-card[data-card-id="' + cardId + '"]');
       if (origCard) origCard.style.display = '';
       heroEl.remove();
+
+      var saved = grid._savedCardOrder;
+      if (saved && saved.length) {
+        saved.forEach(function(c) { grid.appendChild(c); });
+        grid._savedCardOrder = null;
+      }
     }
 
     function switchLang(btn, lang) {
