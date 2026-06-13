@@ -303,6 +303,7 @@
     .video-expand-btn:hover{color:var(--gold);}
     .video-expand-btn .expand-chevron{display:inline-block;transition:transform .3s ease;font-size:.7rem;line-height:1;}
     .video-expand-btn.open .expand-chevron{transform:rotate(180deg);}
+      
 
     /* Expanded hero row — full width, inserted above remaining cards */
     .video-expanded-hero{width:100%;border:1px solid rgba(232,168,0,.25);border-radius:4px;background:rgba(255,255,255,.07);display:flex;gap:0;overflow:hidden;margin-bottom:24px;animation:heroIn .35s ease;}
@@ -317,6 +318,16 @@
     /* Remaining cards row below hero */
     .video-rest-row{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;}
     .video-rest-row .video-card{flex:0 1 calc(33.333% - 16px);min-width:200px;}
+
+    /* On tablet, rest-row cards go 2-per-row to match the normal grid */
+    @media(max-width:900px){
+      .video-rest-row .video-card{flex:0 1 calc(50% - 12px);}
+    }
+    /* On mobile, rest-row cards fill the full container width */
+    @media(max-width:600px){
+      .video-rest-row{gap:20px;}
+      .video-rest-row .video-card{flex:1 1 100%;min-width:0;}
+    }
 
     /* Details panel inside hero */
     .video-card .video-details-inner{display:none;}
@@ -338,7 +349,6 @@
       .video-expanded-hero{flex-direction:column;}
       .video-expanded-hero .hero-thumb{flex:0 0 auto;}
       .video-expanded-hero .hero-thumb video{max-height:220px;}
-      .video-rest-row .video-card{flex:1 1 100%;}
     }
 
     /* GALLERY */
